@@ -1,7 +1,13 @@
 services:
   app:
-    build: .
-    container_name: idgen-container
-    ports:
-      - "8081:80"
-    restart: always
+    image: idgen
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.app.rule=Host(`idgen.sierra.web.id`)
+      - traefik.http.services.app.loadbalancer.server.port=3000
+
+networks:
+  proxy:
+    external: true
